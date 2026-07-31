@@ -5,7 +5,6 @@ REPO_URL="https://miaomiaowu-openwrt.445568.xyz"
 
 echo "=== 妙妙屋 (miaomiaowu) 一键安装 ==="
 
-# 复用 feed.sh 里的架构探测 + 软件源配置逻辑，避免两份脚本各写一套、改一处忘改另一处
 TMP_FEED=$(mktemp)
 trap 'rm -f "$TMP_FEED"' EXIT
 wget -q -O "$TMP_FEED" "$REPO_URL/feed.sh"
