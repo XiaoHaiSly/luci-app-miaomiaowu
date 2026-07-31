@@ -3,8 +3,6 @@ set -e
 
 REPO_URL="https://miaomiaowu-openwrt.445568.xyz"
 
-# 把主逻辑包成函数：既可以被本脚本自己在最下面直接调用（wget | ash 的场景），
-# 也可以被 install.sh 下载后 `. ` source 进去复用，避免两份脚本各写一套架构探测逻辑。
 mmw_setup_feed() {
 
 echo "=== 妙妙屋 (miaomiaowu) 添加软件源 ==="
