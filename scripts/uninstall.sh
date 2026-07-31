@@ -3,7 +3,6 @@ set -e
 
 echo "=== 妙妙屋 (miaomiaowu) 卸载 ==="
 
-# 卸载包之前先把实际配置的数据目录记下来（用户可能改过 database_path，不一定是默认的 /etc/mmw）
 DATA_DIR="/etc/mmw"
 if command -v uci >/dev/null 2>&1; then
     DB_PATH=$(uci -q get miaomiaowu.miaomiaowu.database_path 2>/dev/null || true)
