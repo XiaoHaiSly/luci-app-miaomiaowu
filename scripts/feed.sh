@@ -76,8 +76,6 @@ fi
 
 }
 
-# 只有被 install.sh source 进去时才会设置 MMW_SOURCED=1，此时只定义函数、不自动执行，
-# 交给 install.sh 自己决定什么时候调用 mmw_setup_feed。
 if [ "${MMW_SOURCED:-0}" != "1" ]; then
     mmw_setup_feed
 fi
