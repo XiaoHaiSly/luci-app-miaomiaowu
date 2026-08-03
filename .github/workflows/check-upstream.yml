@@ -127,7 +127,7 @@ jobs:
           fi
           echo "run_id=$RUN_ID" >> "$GITHUB_OUTPUT"
 
-      - name: 等待两个打包各自跑完（互不阻塞，谁先完成谁先记录结果）
+      - name: 等待打包
         id: wait
         if: steps.check.outputs.already_built == 'false'
         timeout-minutes: 90
@@ -174,14 +174,14 @@ jobs:
             echo "::warning::apk 打包未成功（结果: $APK_CONCLUSION）"
           fi
 
-      - name: 只要有一个成功，就触发 Cloudflare 部署
+      - name: 触发 Cloudflare 部署
         if: >
           steps.check.outputs.already_built == 'false' &&
           (steps.wait.outputs.ipk_conclusion == 'success' || steps.wait.outputs.apk_conclusion == 'success')
         run: |
           gh workflow run deploy.yml --repo "$REPO"
 
-      - name: 两个都没成功，跳过部署
+      - name: 失败，跳过部署
         if: >
           steps.check.outputs.already_built == 'false' &&
           steps.wait.outputs.ipk_conclusion != 'success' &&
