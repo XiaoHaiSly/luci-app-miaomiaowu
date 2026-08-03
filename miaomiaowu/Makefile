@@ -2,7 +2,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=miaomiaowu
 
-PKG_VERSION:=$(strip $(shell wget -qO- "https://miaomiaowu-openwrt.445568.xyz/openwrt-24.10/$(ARCH_PACKAGES)/Packages" 2>/dev/null | \
+PKG_VERSION:=$(strip $(shell wget -qO- "https://miaomiaowu-openwrt.pages.dev/openwrt-24.10/$(ARCH_PACKAGES)/Packages" 2>/dev/null | \
 	awk '/^Package: miaomiaowu$$/{f=1;next} f&&/^Version:/{print $$2;exit} /^$$/{f=0}'))
 ifeq ($(PKG_VERSION),)
   PKG_VERSION:=0.0.0-VERSION-FETCH-FAILED
