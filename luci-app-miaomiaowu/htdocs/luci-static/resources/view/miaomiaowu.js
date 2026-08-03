@@ -81,7 +81,7 @@ return view.extend({
 
 		o = s.option(form.Value, 'port', _('监听端口'));
 		o.datatype = 'port';
-		o.default = '8080';
+		o.default = '7852';
 
 		o = s.option(form.Value, 'database_path', _('数据库路径'), _('SQLite 数据库文件存放路径'));
 		o.default = '/etc/mmw/traffic.db';
