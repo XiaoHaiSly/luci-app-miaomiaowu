@@ -2,7 +2,7 @@ name: 妙妙屋-自动all
 
 on:
   schedule:
-    - cron: '0 */12 * * *'
+    - cron: 0 0 */5 * *
   workflow_dispatch:
     inputs:
       force:
