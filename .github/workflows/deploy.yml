@@ -93,7 +93,7 @@ jobs:
             fi
 
             mkdir -p site
-            cp keys/miaomiaowu-ipk.pub site/miaomiaowu-ipk.pub
+            cp scripts/miaomiaowu-ipk.pub site/miaomiaowu-ipk.pub
             cp scripts/install.sh site/install.sh
             cp scripts/feed.sh site/feed.sh
             cp scripts/uninstall.sh site/uninstall.sh
