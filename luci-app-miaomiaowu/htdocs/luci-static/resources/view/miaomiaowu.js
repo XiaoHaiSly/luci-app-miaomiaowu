@@ -31,12 +31,12 @@ function statusHtml(running) {
 }
 
 function injectTapCss() {
-	if (document.getElementById('mmw_tap_css')) return;
+	if (document.getElementById('miaomiaowu_tap_css')) return;
 	var style = document.createElement('style');
-	style.id = 'mmw_tap_css';
+	style.id = 'miaomiaowu_tap_css';
 	style.textContent =
-		'@keyframes mmw_tap { 0% { transform:scale(1); } 50% { transform:scale(0.94); opacity:0.75; } 100% { transform:scale(1); } }' +
-		'.mmw_tap { animation: mmw_tap 0.3s ease; }';
+		'@keyframes miaomiaowu_tap { 0% { transform:scale(1); } 50% { transform:scale(0.94); opacity:0.75; } 100% { transform:scale(1); } }' +
+		'.miaomiaowu_tap { animation: miaomiaowu_tap 0.3s ease; }';
 	document.head.appendChild(style);
 }
 
@@ -50,7 +50,7 @@ return view.extend({
 		var m, s, o;
 
 		m = new form.Map('miaomiaowu', _('妙妙屋'), _('Clash 配置订阅管理工具') +
-			'<div id="mmw_status_wrap" style="margin-top:6px;display:flex;align-items:center;">' +
+			'<div id="miaomiaowu_status_wrap" style="margin-top:6px;display:flex;align-items:center;">' +
 			statusHtml(state.running) +
 			'</div>');
 
@@ -64,9 +64,9 @@ return view.extend({
 			injectTapCss();
 			var btn = (ev && (ev.currentTarget || ev.target)) || null;
 			if (btn) {
-				btn.classList.remove('mmw_tap');
+				btn.classList.remove('miaomiaowu_tap');
 				void btn.offsetWidth;
-				btn.classList.add('mmw_tap');
+				btn.classList.add('miaomiaowu_tap');
 			}
 			if (!state.running) {
 				return;
@@ -84,7 +84,7 @@ return view.extend({
 		o.default = '7852';
 
 		o = s.option(form.Value, 'database_path', _('数据库路径'), _('SQLite 数据库文件存放路径'));
-		o.default = '/etc/mmw/traffic.db';
+		o.default = '/etc/miaomiaowu/traffic.db';
 		o.rmempty = false;
 
 		o = s.option(form.ListValue, 'log_level', _('日志级别'));
@@ -97,7 +97,7 @@ return view.extend({
 		poll.add(function () {
 			return getServiceStatus().then(function (running) {
 				state.running = running;
-				var el = document.getElementById('mmw_status_wrap');
+				var el = document.getElementById('miaomiaowu_status_wrap');
 				if (el) el.innerHTML = statusHtml(running);
 			});
 		});
@@ -116,7 +116,7 @@ return view.extend({
 		}).then(function () {
 			return getServiceStatus();
 		}).then(function (running) {
-			var el = document.getElementById('mmw_status_wrap');
+			var el = document.getElementById('miaomiaowu_status_wrap');
 			if (el) el.innerHTML = statusHtml(running);
 		}).catch(function (err) {
 			ui.addNotification(null, E('p', _('操作失败: ') + (err && err.message ? err.message : err)));

@@ -1,57 +1,59 @@
+# SPDX-License-Identifier: MIT
+
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=miaomiaowu
-
-PKG_VERSION:=$(strip $(shell wget -qO- "https://miaomiaowu-openwrt.pages.dev/openwrt-24.10/$(ARCH_PACKAGES)/Packages" 2>/dev/null | \
-	awk '/^Package: miaomiaowu$$/{f=1;next} f&&/^Version:/{print $$2;exit} /^$$/{f=0}'))
-ifeq ($(PKG_VERSION),)
-  PKG_VERSION:=0.0.0-VERSION-FETCH-FAILED
-endif
+PKG_VERSION:=0.8.6
 PKG_RELEASE:=1
 
-PKG_SOURCE_URL:=https://miaomiaowu-openwrt.445568.xyz/openwrt-24.10/$(ARCH_PACKAGES)
-PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION)_$(ARCH_PACKAGES).ipk
-PKG_SOURCE_PROTO:=default
-PKG_HASH:=skip
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=https://codeload.github.com/iluobei/miaomiaowu/tar.gz/v$(PKG_VERSION)?
+PKG_HASH:=269648631affdd01e6e766129086af0275b8054ffc5937b863f1d74ad15a3b13
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
-PKG_MAINTAINER:=第十六夜月
 PKG_LICENSE:=MIT
+PKG_MAINTAINER:=xiaohaisly
+
+PKG_BUILD_DEPENDS:=golang/host node/host
+PKG_BUILD_PARALLEL:=1
+PKG_BUILD_FLAGS:=no-mips16
+
+GO_PKG:=miaomiaowu
+GO_PKG_BUILD_PKG:=$(GO_PKG)/cmd/server
 
 include $(INCLUDE_DIR)/package.mk
+include $(TOPDIR)/feeds/packages/lang/golang/golang-package.mk
 
 define Package/miaomiaowu
   SECTION:=net
   CATEGORY:=Network
-  TITLE:=Clash 配置订阅管理工具 (妙妙屋后端)
-  DEPENDS:=+libc
+  SUBMENU:=Web Servers/Subscription
+  TITLE:=Clash 配置订阅管理工具
+  URL:=https://miaomiaowu.net
+  DEPENDS:=@(aarch64||arm||i386||x86_64||riscv64) +ca-bundle
 endef
 
 define Package/miaomiaowu/description
-  miaomiaowu 后端服务，配合 luci-app-miaomiaowu 使用
+  Clash配置订阅管理工具，支持节点管理、生成订阅、导入外部订阅节点、聚合流量、聚合订阅等功能。
 endef
 
-define Build/Prepare
-	mkdir -p $(PKG_BUILD_DIR)
-ifeq ($(PKG_VERSION),0.0.0-VERSION-FETCH-FAILED)
-	@echo "错误: 没能从 https://miaomiaowu-openwrt.445568.xyz/openwrt-24.10/$(ARCH_PACKAGES)/Packages 取到版本号" >&2
-	@echo "      请检查该 URL 是否能访问，以及 Packages 里是不是真有 miaomiaowu 这个条目" >&2
-	@exit 1
-endif
-	@if ! gzip -t "$(DL_DIR)/$(PKG_SOURCE)" 2>/dev/null; then \
-		echo "错误: $(DL_DIR)/$(PKG_SOURCE) 不是合法的 ipk(不是 gzip 格式)" >&2; \
-		echo "      前 200 字节内容如下，很可能下载到的是 404 页面:" >&2; \
-		head -c 200 "$(DL_DIR)/$(PKG_SOURCE)" >&2; echo >&2; \
-		exit 1; \
-	fi
-	tar -xzf $(DL_DIR)/$(PKG_SOURCE) -O ./data.tar.gz | tar -xzC $(PKG_BUILD_DIR)
+define Package/miaomiaowu/conffiles
+/etc/config/miaomiaowu
+/etc/miaomiaowu/
 endef
 
 define Build/Compile
+	cd $(PKG_BUILD_DIR)/miaomiaowu && \
+		export PATH="$(STAGING_DIR_HOSTPKG)/bin:$$$$PATH" && \
+		export npm_config_cache="$(PKG_BUILD_DIR)/.npm-cache" && \
+		npm ci --no-audit --no-fund && \
+		npm run build
+	$(call GoPackage/Build/Compile)
 endef
 
 define Package/miaomiaowu/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/usr/bin/mmw $(1)/usr/bin/mmw
+	$(INSTALL_BIN) $(GO_PKG_BUILD_BIN_DIR)/server $(1)/usr/bin/miaomiaowu
 
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/miaomiaowu.init $(1)/etc/init.d/miaomiaowu

@@ -1,18 +1,17 @@
 #!/bin/sh /etc/rc.common
-# 妙妙屋 procd 服务脚本
 
 START=99
 STOP=10
 USE_PROCD=1
 
-PROG=/usr/bin/mmw
+PROG=/usr/bin/miaomiaowu
 
 validate_section_miaomiaowu() {
 	uci_validate_section miaomiaowu miaomiaowu "${1}" \
 		'port:port:7852' \
-		'database_path:string:/etc/mmw/traffic.db' \
+		'database_path:string:/etc/miaomiaowu/traffic.db' \
 		'log_level:string:info' \
-		'enabled:bool:1'
+		'enabled:bool:0'
 }
 
 start_service() {
@@ -20,7 +19,7 @@ start_service() {
 
 	config_load miaomiaowu
 	validate_section_miaomiaowu miaomiaowu || {
-		echo "配置校验失败，请检查 /etc/config/miaomiaowu"
+		echo "Configuration validation failed, please check /etc/config/miaomiaowu"
 		return 1
 	}
 
