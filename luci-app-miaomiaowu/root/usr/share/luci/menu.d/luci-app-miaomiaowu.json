@@ -1,0 +1,13 @@
+{
+	"admin/services/miaomiaowu": {
+		"title": "妙妙屋",
+		"order": 60,
+		"action": {
+			"type": "view",
+			"path": "miaomiaowu"
+		},
+		"depends": {
+			"acl": ["luci-app-miaomiaowu"]
+		}
+	}
+}
