@@ -3,12 +3,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=miaomiaowu
-PKG_VERSION:=0.8.7
+PKG_VERSION:=0.9.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://codeload.github.com/iluobei/miaomiaowu/tar.gz/v$(PKG_VERSION)?
-PKG_HASH:=507bc184d5e83af045b680802e94ad95420e231ade6f2c1ee2705ebb82ab2401
+PKG_HASH:=7d0b1c08483c4b5e7b4685351dfcbb8ead2201ec0bf1be797e43e5b7270ae0cb
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
 PKG_LICENSE:=MIT
