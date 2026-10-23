@@ -3,7 +3,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=luci-app-miaomiaowu
-PKG_VERSION:=0.8.7
+PKG_VERSION:=0.9.3
 PKG_RELEASE:=1
 
 PKG_LICENSE:=MIT
